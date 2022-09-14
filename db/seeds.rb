@@ -13,6 +13,7 @@ Phase.create(phase: 'NYC-SE-080822')
 20.times do 
     User.create(
         name: Faker::Name.name,
+        password: Faker::Internet.password,
         bio: Faker::Quote.yoda,
         email: Faker::Internet.email,
         links: 'github.com',
@@ -24,6 +25,7 @@ end
     Post.create(
         body: Faker::Movie.quote,
         link: Faker::Internet.domain_name,
+        likes: 0,
         user_id: User.all.sample.id
     )
 end
