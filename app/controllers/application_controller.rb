@@ -22,6 +22,11 @@ class ApplicationController < Sinatra::Base
     posts.to_json
   end
 
+  get '/posts/:user_id' do
+    posts = Post.where(user_id: params[:user_id])
+    posts.to_json
+  end
+
   get '/comments' do
     comments = Comment.all 
     comments.to_json
@@ -29,6 +34,12 @@ class ApplicationController < Sinatra::Base
 
   get '/followers' do 
     followers = Follower.all 
+    followers.to_json
+  end
+
+  get '/followers/:followers_id' do
+    #puts params[followers_id: :followers_id]
+    followers = Follower.where(followers_id: params[:followers_id])
     followers.to_json
   end
 
@@ -42,6 +53,17 @@ class ApplicationController < Sinatra::Base
       phase_id: params[:phase_id]
     )
     new_user.to_json
+  end
+
+  # get '/followed-posts' do
+  #   posts = User.left_outer_joins(:posts).select('posts.*, count(posts.id) as post_count').group('users.id')
+  #   posts.to_json
+  # end
+
+  get '/namedPosts' do
+    # posts = User.left_outer_joins(:posts).select('posts.*, count(posts.id) as post_count').group('users.id')
+    posts = Post.all
+    posts.to_json(include: :user)
   end
 
 end

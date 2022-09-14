@@ -4,6 +4,4 @@ class Follower < ActiveRecord::Base
     belongs_to :following, :class_name => 'User'
 
 
-    
-
 end
