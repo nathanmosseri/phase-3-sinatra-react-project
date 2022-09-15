@@ -27,6 +27,16 @@ class ApplicationController < Sinatra::Base
     posts.to_json
   end
 
+  post '/posts' do 
+    post = Post.create(
+      body: params[:body],
+      links: params[:link],
+      user_id: params[:user_id],
+      likes: params[:likes]
+    )
+    post.to_json
+  end
+
   get '/posts/:user_id' do
     posts = Post.where(user_id: params[:user_id])
     posts.to_json
