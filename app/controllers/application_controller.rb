@@ -7,6 +7,11 @@ class ApplicationController < Sinatra::Base
     phases.to_json
   end
 
+  get '/phases/:id' do
+    phase = Phase.find(params[:id])
+    phase.to_json
+  end
+
   get '/users' do 
     users = User.all 
     users.to_json
@@ -64,6 +69,16 @@ class ApplicationController < Sinatra::Base
     # posts = User.left_outer_joins(:posts).select('posts.*, count(posts.id) as post_count').group('users.id')
     posts = Post.all
     posts.to_json(include: :user)
+  end
+
+  get '/phases-with-posts/:id' do 
+    posts = Phase.find(params[:id])
+    posts.to_json(include: {posts: {include: :user}})
+  end
+
+  get '/users-by-name/:name' do
+    user = User.where(name: params[:name])
+    user.to_json(include: :posts)
   end
 
 end
