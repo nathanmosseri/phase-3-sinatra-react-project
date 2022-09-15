@@ -67,7 +67,7 @@ class ApplicationController < Sinatra::Base
 
   get '/namedPosts' do
     # posts = User.left_outer_joins(:posts).select('posts.*, count(posts.id) as post_count').group('users.id')
-    posts = Post.all
+    posts = Post.all.order(created_at: :DESC)
     posts.to_json(include: :user)
   end
 
