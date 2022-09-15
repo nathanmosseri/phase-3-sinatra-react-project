@@ -13,7 +13,7 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/users' do 
-    users = User.all 
+    users = User.all.order(:name)
     users.to_json
   end
 
@@ -30,15 +30,21 @@ class ApplicationController < Sinatra::Base
   post '/posts' do 
     post = Post.create(
       body: params[:body],
-      links: params[:link],
+      link: params[:link],
       user_id: params[:user_id],
       likes: params[:likes]
     )
     post.to_json
   end
 
+  delete 'posts/:id' do
+    post = Post.find(params[:id])
+    post.destroy
+    post.to_json
+  end
+
   get '/posts/:user_id' do
-    posts = Post.where(user_id: params[:user_id])
+    posts = Post.where(user_id: params[:user_id]).order(created_at: :DESC)
     posts.to_json
   end
 
@@ -76,7 +82,6 @@ class ApplicationController < Sinatra::Base
   # end
 
   get '/namedPosts' do
-    # posts = User.left_outer_joins(:posts).select('posts.*, count(posts.id) as post_count').group('users.id')
     posts = Post.all.order(created_at: :DESC)
     posts.to_json(include: :user)
   end
@@ -89,6 +94,11 @@ class ApplicationController < Sinatra::Base
   get '/users-by-name/:name' do
     user = User.where(name: params[:name])
     user.to_json(include: :posts)
+  end
+
+  get '/posts-by-likes' do 
+    posts = Post.all.order(likes: :DESC)
+    posts.to_json
   end
 
 end
